@@ -45,3 +45,9 @@ Test images are from the [COCO Dataset](https://cocodataset.org/):
 - **Citation**: Lin, T.-Y., et al. (2014). Microsoft COCO: Common Objects in Context. ECCV 2014.
 - **License**: [COCO License](https://cocodataset.org/#termsofuse)
 
+
+## TODOs
+
+- How to map labels from different services into a common format?
+- Add support for attribute evaluation
+
