@@ -218,6 +218,33 @@ def save_results_to_markdown(
     output_path.write_text(markdown_content)
 
 
+def load_predictions(pred_path: str) -> list[dict]:
+    """Load predictions from JSON file, handling both array and object formats.
+
+    Args:
+        pred_path: Path to predictions JSON file
+
+    Returns:
+        List of prediction dictionaries
+    """
+    import json
+
+    with open(pred_path, "r") as f:
+        data = json.load(f)
+
+    # If data is a dict with "annotations" key, extract it
+    if isinstance(data, dict) and "annotations" in data:
+        return data["annotations"]
+    # If data is already a list, return as-is
+    elif isinstance(data, list):
+        return data
+    else:
+        raise ValueError(
+            f"Predictions file must be either a list or a dict with 'annotations' key. "
+            f"Got {type(data).__name__}"
+        )
+
+
 def main():
     """Run evaluation on ground truth and predictions from command line."""
     import argparse
@@ -259,7 +286,8 @@ def main():
     gt_coco = COCO(args.gt_path)
 
     rprint(f"[cyan]Loading predictions from:[/cyan] {args.pred_path}")
-    pred_coco = gt_coco.loadRes(args.pred_path)
+    predictions = load_predictions(args.pred_path)
+    pred_coco = gt_coco.loadRes(predictions)
 
     # Evaluate
     rprint("[cyan]Running evaluation...[/cyan]")

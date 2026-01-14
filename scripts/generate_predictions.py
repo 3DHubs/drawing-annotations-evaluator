@@ -249,9 +249,10 @@ def generate_predictions(
             predictions.append(fp)
             fp_count += 1
 
-    # Save predictions
+    # Save predictions wrapped in top-level object
+    output_data = {"annotations": predictions}
     with open(output_path, "w") as f:
-        json.dump(predictions, f, indent=2)
+        json.dump(output_data, f, indent=2)
 
     # Print statistics
     print(f"\nGenerated {len(predictions)} predictions")
